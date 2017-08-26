@@ -9,7 +9,7 @@ Sometimes it screws us up, if we see the world surrounding us moving we will thi
 We can apply this same concept to our robot. If the image in the camera starts moving, then the camera (which is attached to the robot) is moving.
 That is what visual inertial odometry is, and like many other things that we do easily, computers do not.
 
-#### *goodFeaturesToTrack*
+### *goodFeaturesToTrack*
 Designed to find corners of interest because they are easily trackable through multiple frames.
 Corner detection algorithms are bad with reflective surfaces and lighting objects.
 Because of this points jump around on test video.  
@@ -55,11 +55,11 @@ This is what Kalman Filters and Alpha-Beta Filters are.
 [Wikipedia on Alpha-Beta filters](https://en.wikipedia.org/wiki/Alpha_beta_filter)  
 Since this is much simpler than Kalman filters to implement, and sometimes has better performance, we should implement this.
 There are multiple things that can be implemented in this:
-1. Gyroscope reading (for direction)
-2. Magnetometer reading (for direction)
-3. Visual Inertial Odometry (for both direction and location)
-4. Encoders on drive train (for posibbly both direction and location)
-5. Accelerometers (for location)  
+- Gyroscope reading (for direction)
+- Magnetometer reading (for direction)
+- Visual Inertial Odometry (for both direction and location)
+- Encoders on drive train (for posibbly both direction and location)
+- Accelerometers (for location)  
 
 (We have a gyroscope (built into roboRio), and multiple accelerometers. 
 We do not have a magnetometer however. 
