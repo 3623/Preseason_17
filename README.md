@@ -21,7 +21,7 @@ OpenCV's method of doing optical flow by the Lucas-Kanade Method, which assumes 
 Optical flow assumes that an image will retain the same intensity through multiple frames (auto-adjust/brightness must be turned off). 
 OpenCV's method takes two input images (previous and updated) and the set of points which are returned from goodFeaturesToTrack.
 The Lucas-Kanade Method implementation will track those points and return the location of new points in the update frame.  
-This is basically a more robust implementation of goddFeaturesToTrack, as it can handle large movements because of its "pyramiding" algorithm.
+This is basically a more robust implementation of goddFeaturesToTrack, as it can handle large movements because of its "pyramiding" algorithm.  
 [OpenCV Docs on Optical Flow](http://docs.opencv.org/3.2.0/d7/d8b/tutorial_py_lucas_kanade.html)  
 [More OpenCV Docs on Optical Flow](http://docs.opencv.org/3.2.0/d7/de9/group__video.html)  
 
