@@ -1,6 +1,14 @@
 # **Preseason 17**
 
 ## Visual Intertial Odometry
+To figure out where we are in the world, we subconciously use our eyes to determine not only position relative to other objects, 
+but also our speed relative to those objects.
+It works quite well most of the time, and video game designers know this so that they can design their games to make it seem like we are moving.
+Sometimes it screws us up, if we see the world surrounding us moving we will think that we are moving even when we aren't
+(sometimes this happens when on a train) 
+We can apply this same concept to our robot. If the image in the camera starts moving, then the camera (which is attached to the robot) is moving.
+That is what visual inertial odometry is, and like many other things that we do easily, computers do not.
+
 ### *goodFeaturesToTrack*
 Designed to find corners of interest because they are easily trackable through multiple frames.
 Corner detection algorithms are bad with reflective surfaces and lighting objects.
