@@ -9,7 +9,7 @@ Sometimes it screws us up, if we see the world surrounding us moving we will thi
 We can apply this same concept to our robot. If the image in the camera starts moving, then the camera (which is attached to the robot) is moving.
 That is what visual inertial odometry is, and like many other things that we do easily, computers do not.
 
-### *goodFeaturesToTrack*
+### [*goodFeaturesToTrack*](feature_tracking_test.py)
 Designed to find corners of interest because they are easily trackable through multiple frames.
 Corner detection algorithms are bad with reflective surfaces and lighting objects.
 Because of this points jump around on test video.  
