@@ -29,3 +29,6 @@ Numbered list:
   3. pears
 
 A [link](http://example.com).
+
+Proper git developement
+http://nvie.com/posts/a-successful-git-branching-model/

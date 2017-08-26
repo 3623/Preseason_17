@@ -5,11 +5,11 @@ To figure out where we are in the world, we subconciously use our eyes to determ
 but also our speed relative to those objects.
 It works quite well most of the time, and video game designers know this so that they can design their games to make it seem like we are moving.
 Sometimes it screws us up, if we see the world surrounding us moving we will think that we are moving even when we aren't
-(sometimes this happens when on a train) 
+(sometimes this happens when on a train). This is also evident when trying to balance on one leg with your eyes closed. 
 We can apply this same concept to our robot. If the image in the camera starts moving, then the camera (which is attached to the robot) is moving.
 That is what visual inertial odometry is, and like many other things that we do easily, computers do not.
 
-### *goodFeaturesToTrack*
+#### *goodFeaturesToTrack*
 Designed to find corners of interest because they are easily trackable through multiple frames.
 Corner detection algorithms are bad with reflective surfaces and lighting objects.
 Because of this points jump around on test video.  
@@ -18,13 +18,13 @@ Would be implemented by comparing location of each previous point to updated poi
 Could also use estimated velocity to predict search location.
 Rotation could be done similarly (I think) but woud be more complex (obviously)
 
-### *Phase Correlation*
+#### *Phase Correlation*
 Uses fast (discrete) fourier transform algorithm to describe each image in a comparable way.
 Does math to compute translation from one image to the next.  
 [Wikipedia on Phase Correlation](https://en.wikipedia.org/wiki/Phase_correlation)  
 [OpenCV Docs on DFT](http://docs.opencv.org/2.4/modules/core/doc/operations_on_arrays.html#dft)
 
-### *calcOpticalFlowPyrLK*
+#### *calcOpticalFlowPyrLK*
 OpenCV's method of doing optical flow by the Lucas-Kanade Method, which assumes that motion will be the same in neighboring areas. 
 Optical flow assumes that an image will retain the same intensity through multiple frames (auto-adjust/brightness must be turned off). 
 OpenCV's method takes two input images (previous and updated) and the set of points which are returned from goodFeaturesToTrack.
@@ -33,7 +33,7 @@ This is basically a more robust implementation of goddFeaturesToTrack, as it can
 [OpenCV Docs on Optical Flow](http://docs.opencv.org/3.2.0/d7/d8b/tutorial_py_lucas_kanade.html)  
 [More OpenCV Docs on Optical Flow](http://docs.opencv.org/3.2.0/d7/de9/group__video.html)  
 
-### *Template Matching*
+#### *Template Matching*
 OpenCV provides multiple implementations of template matching.
 
 
@@ -50,7 +50,8 @@ But what if we combined multiple measurements?
 With data from multiple methods to estimate state we can get a more accurate estimation.
 This is what Kalman Filters and Alpha-Beta Filters are.
 
-### *Alpha-Beta Filter* 
+#### *Alpha-Beta Filter* 
+
 [Wikipedia on Alpha-Beta filters](https://en.wikipedia.org/wiki/Alpha_beta_filter)  
 Since this is much simpler than Kalman filters to implement, and sometimes has better performance, we should implement this.
 There are multiple things that can be implemented in this:
