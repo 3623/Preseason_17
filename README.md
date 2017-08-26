@@ -61,7 +61,7 @@ There are multiple things that can be implemented in this:
 - Encoders on drive train (for posibbly both direction and location)
 - Accelerometers (for location)  
 
->(We have a gyroscope (built into roboRio), and multiple accelerometers. 
+>We have a gyroscope (built into roboRio), and multiple accelerometers. 
 We do not have a magnetometer however. 
 We should look into investing in a proper IMU. 
-[Heres a relatively cheap one.](https://www.vexrobotics.com/vexpro/motors-electronics/pigeon-imu.html))
+[Heres a relatively cheap one.](https://www.vexrobotics.com/vexpro/motors-electronics/pigeon-imu.html)
