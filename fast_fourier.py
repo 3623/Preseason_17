@@ -24,10 +24,9 @@ while (cap.isOpened()):
 
     dft = cv2.dft(np.float32(gray), flags=cv2.DFT_COMPLEX_OUTPUT)
     dft_shift = np.fft.fftshift(dft)
-    print dft
 
     magnitude_spectrum = (20 * np.log(cv2.magnitude(dft_shift[:, :, 0], dft_shift[:, :, 1])))/256
-    cv2.imshow("WTF", magnitude_spectrum)
+    cv2.imshow("FFT", magnitude_spectrum)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
