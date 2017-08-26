@@ -18,13 +18,13 @@ Would be implemented by comparing location of each previous point to updated poi
 Could also use estimated velocity to predict search location.
 Rotation could be done similarly (I think) but woud be more complex (obviously)
 
-### *Phase Correlation*
+### [*Phase Correlation*](fast_fourier.py)
 Uses fast (discrete) fourier transform algorithm to describe each image in a comparable way.
 Does math to compute translation from one image to the next.  
 [Wikipedia on Phase Correlation](https://en.wikipedia.org/wiki/Phase_correlation)  
 [OpenCV Docs on DFT](http://docs.opencv.org/2.4/modules/core/doc/operations_on_arrays.html#dft)
 
-### *calcOpticalFlowPyrLK*
+### [*calcOpticalFlowPyrLK*](opencv_optical_flow.py)
 OpenCV's method of doing optical flow by the Lucas-Kanade Method, which assumes that motion will be the same in neighboring areas. 
 Optical flow assumes that an image will retain the same intensity through multiple frames (auto-adjust/brightness must be turned off). 
 OpenCV's method takes two input images (previous and updated) and the set of points which are returned from goodFeaturesToTrack.
@@ -33,7 +33,7 @@ This is basically a more robust implementation of goddFeaturesToTrack, as it can
 [OpenCV Docs on Optical Flow](http://docs.opencv.org/3.2.0/d7/d8b/tutorial_py_lucas_kanade.html)  
 [More OpenCV Docs on Optical Flow](http://docs.opencv.org/3.2.0/d7/de9/group__video.html)  
 
-### *Template Matching*
+### [*Template Matching*](template_matching_optical_flow.py)
 OpenCV provides multiple implementations of template matching.
 
 
@@ -61,7 +61,7 @@ There are multiple things that can be implemented in this:
 - Encoders on drive train (for posibbly both direction and location)
 - Accelerometers (for location)  
 
-(We have a gyroscope (built into roboRio), and multiple accelerometers. 
+>(We have a gyroscope (built into roboRio), and multiple accelerometers. 
 We do not have a magnetometer however. 
 We should look into investing in a proper IMU. 
 [Heres a relatively cheap one.](https://www.vexrobotics.com/vexpro/motors-electronics/pigeon-imu.html))
