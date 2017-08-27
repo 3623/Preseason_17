@@ -35,6 +35,7 @@ This is basically a more robust implementation of goddFeaturesToTrack, as it can
 
 ### [*Template Matching*](template_matching_optical_flow.py)
 OpenCV provides multiple implementations of template matching.
+http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_table_of_contents_feature2d/py_table_of_contents_feature2d.html
 - [ ] Cover general theory  
 - [ ] Implement    
 
@@ -50,7 +51,7 @@ The gyroscope drifts after some time and has to be calibrated correctly at start
 But what if we combined multiple measurements? 
 With data from multiple methods to estimate state we can get a more accurate estimation.
 This is what Kalman Filters and Alpha-Beta Filters are.  
-[Wikipedia MRE](https://en.wikipedia.org/wiki/Moving_horizon_estimation)  
+[Wikipedia MHE](https://en.wikipedia.org/wiki/Moving_horizon_estimation)  
 
 ### *Alpha-Beta Filter* 
 - [ ] Cover general theory  
