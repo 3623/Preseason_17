@@ -49,7 +49,8 @@ The gyroscope drifts after some time and has to be calibrated correctly at start
 *Everything* has some error.
 But what if we combined multiple measurements? 
 With data from multiple methods to estimate state we can get a more accurate estimation.
-This is what Kalman Filters and Alpha-Beta Filters are.
+This is what Kalman Filters and Alpha-Beta Filters are.  
+[Wikipedia MRE](https://en.wikipedia.org/wiki/Moving_horizon_estimation)  
 
 ### *Alpha-Beta Filter* 
 -[ ] Cover general theory  
