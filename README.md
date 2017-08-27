@@ -35,8 +35,8 @@ This is basically a more robust implementation of goddFeaturesToTrack, as it can
 
 ### [*Template Matching*](template_matching_optical_flow.py)
 OpenCV provides multiple implementations of template matching.
--[ ] Cover general theory  
--[ ] Implement    
+- [ ] Cover general theory  
+- [ ] Implement    
 
 ## State Estimation
 As we know subconciously, there are multiple ways to track the state (position) of our robot.
@@ -53,7 +53,7 @@ This is what Kalman Filters and Alpha-Beta Filters are.
 [Wikipedia MRE](https://en.wikipedia.org/wiki/Moving_horizon_estimation)  
 
 ### *Alpha-Beta Filter* 
--[ ] Cover general theory  
+- [ ] Cover general theory  
 [Wikipedia on Alpha-Beta filters](https://en.wikipedia.org/wiki/Alpha_beta_filter)  
 Since this is much simpler than Kalman filters to implement, and sometimes has better performance, we should implement this.
 There are multiple things that can be implemented in this:
