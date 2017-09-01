@@ -43,9 +43,28 @@ Some methods can compensate for rotation.
 However all methods need a distinct template. 
 We are guaranteed no such thing grabbing templates from the corners of each image. 
 There is a high chance of false detections which would throw off the estimation of movement imensely. 
-http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_table_of_contents_feature2d/py_table_of_contents_feature2d.html
+This doesn't seem to be a practical or advantageous solution.  
+[Open CV Docs on Template Matching](http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_table_of_contents_feature2d/py_table_of_contents_feature2d.html)
 
+---
 
+> All of these methods are used to determine the movement from one frame to the next.
+With that we can do some math to determine the "actual" movement of the camera and thus the robot.
+Knowing the distance from the camera to whatever is in frame (D)
+(in our case the ceiling (to keep things 2 dimensional and thus simple)).
+With that and the field of view (FOV)for the camera (which should be found on any specifications sheet) it would be simple trigonometry.
+We could find the distance that every pixel represents (S) with `2D*cos(90-(FOV/2))` and the movement between frame in pixels (P), 
+we could find the movement of the camera with `P*S`.
+
+#### Why use Visual Inertial Odometry?
+Very precise sensors which can pick up very small movement are often expensive, tedious, and fragile. 
+Many of the sensors we have access to are just not good enough to pick up the slow drift we would have and had with holonomic drive.
+A camera however, is cheap and reflects accuratelly small shifts in movement and if properly vibration-isolated, can give an accurate reflection of this too.
+For the purpose of small drift and movement the camera can be very accurate. 
+Of course at fast and faster speeds the camera needs to have a high enough frame rate to be able to capture images with at least some similar parts. 
+Therefore we would want to use an algorithm that can as accurately as possible detect movement from frame to frame, 
+and does this fast. For that, I think dealing with OpenCV's optical flow method works well.
+The problem is now to deal with the different movements of multiple points and to be able to draw conclusions about the rotational and linear movement of our robot. 
 
 ## State Estimation
 As we know subconciously, there are multiple ways to track the state (position) of our robot.
