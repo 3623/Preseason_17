@@ -33,11 +33,19 @@ This is basically a more robust implementation of goddFeaturesToTrack, as it can
 [OpenCV Docs on Optical Flow](http://docs.opencv.org/3.2.0/d7/d8b/tutorial_py_lucas_kanade.html)  
 [More OpenCV Docs on Optical Flow](http://docs.opencv.org/3.2.0/d7/de9/group__video.html)  
 
-### [*Template Matching*](template_matching_optical_flow.py)
+### *Template Matching*
+Template matching would be a crude way of determining the shift between frame to frame. 
+The basic concept is that we would search in the updated frame for parts of the old image. 
+If we search for corners from the old image, we are guaranteed a full match of one of the corner templates
+(unless the image shifts more than the diagonal of the image). 
 OpenCV provides multiple implementations of template matching.
+Some methods can compensate for rotation. 
+However all methods need a distinct template. 
+We are guaranteed no such thing grabbing templates from the corners of each image. 
+There is a high chance of false detections which would throw off the estimation of movement imensely. 
 http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_table_of_contents_feature2d/py_table_of_contents_feature2d.html
-- [ ] Cover general theory  
-- [ ] Implement    
+
+
 
 ## State Estimation
 As we know subconciously, there are multiple ways to track the state (position) of our robot.
