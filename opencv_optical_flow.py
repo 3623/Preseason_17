@@ -14,7 +14,7 @@ if __name__ == '__main__':
     resize = cv2.resize(old_frame, (0, 0), fx=0.5, fy=0.5)
     height, width = resize.shape[:2]
     minDistanceP = (width + height) / 2 / 30
-    reset = 2;
+    reset = 3
     # params for ShiTomasi corner detection
     feature_params = dict(maxCorners=30,
                           qualityLevel=0.6,
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     lk_params = dict(winSize=(15, 15),
                      maxLevel=2,
                      criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
-
+    maxDif = ((height*height) + (width*width))/50
     old_gray = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY)
     p0 = cv2.goodFeaturesToTrack(old_gray, mask=None, **feature_params)
     # Create a mask image for drawing purposes
@@ -56,6 +56,7 @@ if __name__ == '__main__':
 
         sumX = 0
         sumY = 0
+        terms = 0
         count += 1
         if count == 60:
             totalX = 0
@@ -64,16 +65,19 @@ if __name__ == '__main__':
         for i, (new, old) in enumerate(zip(good_new, good_old)):
             a, b = new.ravel()
             c, d = old.ravel()
-            if d-b < height/2:
-                sumY += d-b
-            if c-a < width/2:
-                sumX += c-a
-            mask = cv2.line(mask, (a, b), (c, d), color[i].tolist(), 2)
-            resize = cv2.circle(resize, (a, b), 5, color[i].tolist(), -1)
+            difY = d - b
+            difX = c - a
+            # print (difY*difY) + (difX*difX)
+            if (difY*difY) + (difX*difX) < maxDif:
+                sumX += difX
+                sumY += difY
+                terms += 1
+                mask = cv2.line(mask, (a, b), (c, d), color[i].tolist(), 2)
+                resize = cv2.circle(resize, (a, b), 5, color[i].tolist(), -1)
         error = False
         try:
-            totalX += sumX/(i+1)
-            totalY += sumY/(i+1)
+            totalX += sumX/(terms)
+            totalY += sumY/(terms)
             #print "%.2f, %.2f" % (round(totalX,2), round(totalY,2))
         except:
             print "No terms ", count
@@ -91,8 +95,9 @@ if __name__ == '__main__':
         if cv2.waitKey(2) & 0xFF == ord('q'):
             break
 
-    print "%.2f, %.2f" % (round(totalX, 2), round(totalY, 2))
+    print "Max Length: %.2f,  Point Reset: %.f" %(maxDif, reset)
+    print "Displacement X: %.2f,  Displacement Y: %.2f" % (round(totalX, 2), round(totalY, 2))
     cv2.imshow("Optical Flow", img)
-    cv2.waitKey(1000)
+    cv2.waitKey(0)
     cap.release()
     cv2.destroyAllWindows()
