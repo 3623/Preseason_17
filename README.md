@@ -1,6 +1,6 @@
 # **Preseason 17**
 
-## Visual Intertial Odometry
+## **Visual Intertial Odometry**
 To figure out where we are in the world, we subconciously use our eyes to determine not only position relative to other objects, 
 but also our speed relative to those objects.
 It works quite well most of the time, and video game designers know this so that they can design their games to make it seem like we are moving.
@@ -56,7 +56,7 @@ With that and the field of view (FOV)for the camera (which should be found on an
 We could find the distance that every pixel represents (S) with `2D*cos(90-(FOV/2))` and the movement between frame in pixels (P), 
 we could find the movement of the camera with `P*S`.
 
-#### Why use Visual Inertial Odometry?
+### Why use Visual Inertial Odometry?
 Very precise sensors which can pick up very small movement are often expensive, tedious, and fragile. 
 Many of the sensors we have access to are just not good enough to pick up the slow drift we would have and had with holonomic drive.
 A camera however, is cheap and reflects accuratelly small shifts in movement and if properly vibration-isolated, can give an accurate reflection of this too.
@@ -68,7 +68,7 @@ The problem is now to deal with the different movements of multiple points and t
 
 ---
 
-## State Estimation
+## **State Estimation**
 As we know subconciously, there are multiple ways to track the state (position) of our robot.
 As basic drive/time auto works on this principle. 
 In theory if the robot drives a set period of time it will move a set distance and end up in a set location.
