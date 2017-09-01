@@ -66,6 +66,8 @@ Therefore we would want to use an algorithm that can as accurately as possible d
 and does this fast. For that, I think dealing with OpenCV's optical flow method works well.
 The problem is now to deal with the different movements of multiple points and to be able to draw conclusions about the rotational and linear movement of our robot. 
 
+---
+
 ## State Estimation
 As we know subconciously, there are multiple ways to track the state (position) of our robot.
 As basic drive/time auto works on this principle. 
