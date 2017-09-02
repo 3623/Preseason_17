@@ -41,7 +41,7 @@ Sometimes it screws us up, if we see the world surrounding us moving we will thi
 We can apply this same concept to our robot. If the image in the camera starts moving, then the camera (which is attached to the robot) is moving.
 That is what visual inertial odometry is, and like many other things that we do easily, computers do not.
 
-### [*goodFeaturesToTrack*](feature_tracking_test.py)
+- ### [*goodFeaturesToTrack*](feature_tracking_test.py)
 Designed to find corners of interest because they are easily trackable through multiple frames.
 Corner detection algorithms are bad with reflective surfaces and lighting objects.
 Because of this points jump around on test video.  
@@ -50,13 +50,13 @@ Would be implemented by comparing location of each previous point to updated poi
 Could also use estimated velocity to predict search location.
 Rotation could be done similarly (I think) but woud be more complex (obviously)
 
-### [*Phase Correlation*](fast_fourier.py)
+- ### [*Phase Correlation*](fast_fourier.py)
 Uses fast (discrete) fourier transform algorithm to describe each image in a comparable way.
 Does math to compute translation from one image to the next.  
 [Wikipedia on Phase Correlation](https://en.wikipedia.org/wiki/Phase_correlation)  
 [OpenCV Docs on DFT](http://docs.opencv.org/2.4/modules/core/doc/operations_on_arrays.html#dft)
 
-### [*calcOpticalFlowPyrLK*](opencv_optical_flow.py)
+- ### [*calcOpticalFlowPyrLK*](opencv_optical_flow.py)
 OpenCV's method of doing optical flow by the Lucas-Kanade Method, which assumes that motion will be the same in neighboring areas. 
 Optical flow assumes that an image will retain the same intensity through multiple frames (auto-adjust/brightness must be turned off). 
 OpenCV's method takes two input images (previous and updated) and the set of points which are returned from goodFeaturesToTrack.
@@ -78,7 +78,7 @@ There is a high chance of false detections which would throw off the estimation 
 This doesn't seem to be a practical or advantageous solution.  
 [Open CV Docs on Template Matching](http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_table_of_contents_feature2d/py_table_of_contents_feature2d.html)
 
----
+
 
 > All of these methods are used to determine the movement from one frame to the next.
 With that we can do some math to determine the "actual" movement of the camera and thus the robot.
