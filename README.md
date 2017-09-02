@@ -78,9 +78,9 @@ There is a high chance of false detections which would throw off the estimation 
 This doesn't seem to be a practical or advantageous solution.  
 [Open CV Docs on Template Matching](http://docs.opencv.org/3.0-beta/doc/py_tutorials/py_feature2d/py_table_of_contents_feature2d/py_table_of_contents_feature2d.html)
 
-
 ----
-> All of these methods are used to determine the movement from one frame to the next.
+
+All of these methods are used to determine the movement from one frame to the next.
 With that we can do some math to determine the "actual" movement of the camera and thus the robot.
 Knowing the distance from the camera to whatever is in frame (D)
 (in our case the ceiling (to keep things 2 dimensional and thus simple)).
@@ -100,6 +100,13 @@ The problem is now to deal with the different movements of multiple points and t
 
 ## OpenCV Optical Flow (In Depth)
 
+---
+
+## Offboard Processing
+
+---
+
+## FRC Dashboard
 
 ---
 ---
