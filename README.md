@@ -102,6 +102,11 @@ The problem is now to deal with the different movements of multiple points and t
 
 ---
 
+## Vision
+http://www.intorobotics.com/how-to-detect-and-track-object-with-opencv/
+
+---
+
 ## Offboard Processing
 
 ---
