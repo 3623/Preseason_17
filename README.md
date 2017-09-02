@@ -101,3 +101,20 @@ The problem is now to deal with the different movements of multiple points and t
 ## OpenCV Optical Flow (In Depth)
 
 
+---
+---
+
+## Mechanical Improvements
+
+### roboRio Enclosure
+
+### Radio vibration and damage protection
+
+### Camera mounting
+
+### PWM wire retainment for sparks
+
+## Drivetrains
+
+
+
