@@ -106,9 +106,9 @@ The problem is now to deal with the different movements of multiple points and t
 
 ---
 
-## FRC Dashboard
-
+## FRC Dashboard  
 [Github FRC Dashboard](https://github.com/FRCDashboard/FRCDashboard)
+
 ---
 ---
 
