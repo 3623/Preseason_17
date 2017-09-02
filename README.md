@@ -106,13 +106,13 @@ The problem is now to deal with the different movements of multiple points and t
 
 ## Mechanical Improvements
 
-### roboRio Enclosure
+- ### roboRio Enclosure
 
-### Radio vibration and damage protection
+- ### Radio vibration and damage protection
 
-### Camera mounting
+- ### Camera mounting
 
-### PWM wire retainment for sparks
+- ### PWM wire retainment for sparks
 
 ## Drivetrains
 
