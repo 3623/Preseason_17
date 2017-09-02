@@ -15,6 +15,7 @@ if __name__ == '__main__':
     height, width = resize.shape[:2]
     minDistanceP = (width + height) / 2 / 30
     reset = 3
+    maxDif = ((height*height) + (width*width))/1000
     # params for ShiTomasi corner detection
     feature_params = dict(maxCorners=30,
                           qualityLevel=0.6,
@@ -24,11 +25,12 @@ if __name__ == '__main__':
     lk_params = dict(winSize=(15, 15),
                      maxLevel=2,
                      criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
-    maxDif = ((height*height) + (width*width))/50
+
     old_gray = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY)
     p0 = cv2.goodFeaturesToTrack(old_gray, mask=None, **feature_params)
     # Create a mask image for drawing purposes
     mask = np.zeros_like(resize)
+
     count = 0
     totalX = 0
     totalY = 0
