@@ -112,7 +112,7 @@ http://www.intorobotics.com/how-to-detect-and-track-object-with-opencv/
 ---
 
 ## FRC Dashboard  
-[Github FRC Dashboard](https://github.com/FRCDashboard/FRCDashboard)
+[Github FRC Dashboard](https://github.com/FRCDashboard/FRCDashboard) - Versatile non-WPILib Dashboard. Possible Programming training and suited to expanding to new needs.
 
 ---
 ---
@@ -120,8 +120,15 @@ http://www.intorobotics.com/how-to-detect-and-track-object-with-opencv/
 ## Mechanical Improvements
 
 - ### roboRio Enclosure
+    * Design Goals
+        * Protect RoboRIO from blunt impacts (falling game pieces)
+        * Concise wire management
+        * Versatile mount system
+        * Easy access to wires for removal/change
 
 - ### Radio vibration and damage protection
+    * Design Goals
+        * Protect Radio from blunt impacts and constant vibration       
 
 - ### Camera mounting
 
@@ -129,5 +136,9 @@ http://www.intorobotics.com/how-to-detect-and-track-object-with-opencv/
 
 ## Drivetrains
 
+- ### Rebiuld last year's drivetrain with VEX Versa-chassis
+    * During preseason, build a robot so when season comes around, students know the general gist of build season
+    * Infinite drive practice
+    * Chance to learn more about the drivetrain with minimal rush to get it working.
 
 
