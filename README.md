@@ -10,7 +10,7 @@
 - ### [Wrapper Code](/Main-Code)
     * Offboard Processing handling
     * State estimation
-    * Proper code structure & developement
+    * Proper code structure & development
 - ### [FRC Dashboard](https://github.com/FRCDashboard/FRCDashboard)  
     Versatile non-WPILib Dashboard. Possible Programming training and suited to expanding to new needs.
 
