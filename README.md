@@ -1,15 +1,18 @@
 # **Preseason 17**
 
+## Programming
 
+- ### [Vision](/Vision)
+    * Visual Inertial Odometry
+    * Target tracking
+    * Offboard Processing handling
 
-## Offboard Processing
+- ### [Wrapper Code](/Robot Code Wrapper)
+    * Offboard Processing handling
+    * State estimation
+- ### [FRC Dashboard](https://github.com/FRCDashboard/FRCDashboard)  
+    Versatile non-WPILib Dashboard. Possible Programming training and suited to expanding to new needs.
 
----
-
-## FRC Dashboard  
-[Github FRC Dashboard](https://github.com/FRCDashboard/FRCDashboard) - Versatile non-WPILib Dashboard. Possible Programming training and suited to expanding to new needs.
-
----
 ---
 
 ## Mechanical Improvements
@@ -28,6 +31,8 @@
 - ### Camera mounting
 
 - ### PWM wire retainment for sparks
+
+---
 
 ## Drivetrains
 
