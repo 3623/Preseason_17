@@ -65,6 +65,10 @@ and does this fast. For that, I think dealing with OpenCV's optical flow method 
 The problem is now to deal with the different movements of multiple points and to be able to draw conclusions about the rotational and linear movement of our robot. 
 
 ## OpenCV Optical Flow (In Depth)
+OpenCV's optical flow function can reliably return the vectors of each point tracked. 
+With this the rotation and translation of the robot have to be determined.
+`x' = xcosθ-ysinθ+X`
+`y' = ycosθ+xsinθ+Y`
 
 ---
 
