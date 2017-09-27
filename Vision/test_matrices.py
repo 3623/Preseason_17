@@ -25,6 +25,12 @@ x_prime = np.matrix([[11.27265159,-17.39832909,1],
 [10.5330494,15.24294828,1],
 [-3.752077133,14.27591165,1]])
 # print x_prime
-xp_inv = np.linalg.pinv(x_prime)
-t = xp_inv*x##np.dot(x,xp_inv)
-print t
+x_inv = np.linalg.pinv(x)
+t = x_inv*x_prime##np.dot(x,xp_inv)
+transpose = np.transpose(t)
+check = x*t
+print t.round(4)
+print "========================="
+print transpose.round(4)
+print "========================="
+print check.round(3)
