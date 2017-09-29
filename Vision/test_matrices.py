@@ -29,6 +29,7 @@ x_inv = np.linalg.pinv(x)
 t = x_inv*x_prime##np.dot(x,xp_inv)
 transpose = np.transpose(t)
 check = x*t
+print x_inv.shape, x_prime.shape
 print t.round(4)
 print "========================="
 print transpose.round(4)
