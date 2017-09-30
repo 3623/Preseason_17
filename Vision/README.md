@@ -67,9 +67,20 @@ The problem is now to deal with the different movements of multiple points and t
 ## OpenCV Optical Flow (In Depth)
 OpenCV's optical flow function can reliably return the vectors of each point tracked. 
 With this the rotation and translation of the robot have to be determined.
-`x' = xcosθ-ysinθ+X`
-`y' = ycosθ+xsinθ+Y`
-
+The general form of an equation calculating the transformation of a point (x,y) is `x' = xcosθ-ysinθ+X` and `y' = ycosθ+xsinθ+Y`.
+However we are trying to find the amount of rotation and amount of translation,which are described by θ, X, and Y respectively.
+With three unknowns for both equations, those variables can be found using matrices if three points and their translations are known.
+However, often times we will be tracking more than three points and how should three points be selected out of many?
+Also often enough there will not be three points to track.   
+[Physics Forum on this method](https://www.physicsforums.com/threads/trying-to-derive-a-transformation-matrix-from-a-set-of-known-points.360963/)  
+Another way those variables can be solved for is by calculating the [homogenous transformation matrix](http://planning.cs.uiuc.edu/node99.html)(T), 
+which is a matrix that contains the equations listed previously.
+```
+ |cosθ   -sinθ     X|    |x1  x2 .. xN|    |x'1  x'2 .. x'N|
+T|sinθ    cosθ     Y| x X|y1  y2 .. yN|= X'|y'1  y'2 .. y'N|
+ | 0        0      1|    | 1   1 ..  1|    |  1    1 ..   1|
+```
+This can be multiplied by a set of points to get the translated points
 ---
 
 ## Vision
