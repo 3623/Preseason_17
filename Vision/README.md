@@ -48,10 +48,10 @@ This doesn't seem to be a practical or advantageous solution.
 
 All of these methods are used to determine the movement from one frame to the next.
 With that we can do some math to determine the "actual" movement of the camera and thus the robot.
-Knowing the distance from the camera to whatever is in frame (D)
+Knowing the distance from the camera to whatever is in frame (`D`)
 (in our case the ceiling (to keep things 2 dimensional and thus simple)).
-With that and the field of view (FOV)for the camera (which should be found on any specifications sheet) it would be simple trigonometry.
-We could find the distance that every pixel represents (S) with `2D*cos(90-(FOV/2))` and the movement between frame in pixels (P), 
+With that and the field of view (`FOV`)for the camera (which should be found on any specifications sheet) it would be simple trigonometry.
+We could find the distance that every pixel represents (`S`) with `2D*cos(90-(FOV/2))` and the movement between frame in pixels (`P`), 
 we could find the movement of the camera with `P*S`.
 
 ### Why use Visual Inertial Odometry?
@@ -67,20 +67,40 @@ The problem is now to deal with the different movements of multiple points and t
 ## OpenCV Optical Flow (In Depth)
 OpenCV's optical flow function can reliably return the vectors of each point tracked. 
 With this the rotation and translation of the robot have to be determined.
-The general form of an equation calculating the transformation of a point (x,y) is `x' = xcosθ-ysinθ+X` and `y' = ycosθ+xsinθ+Y`.
-However we are trying to find the amount of rotation and amount of translation,which are described by θ, X, and Y respectively.
+The general form of an equation calculating the transformation of a point `(x,y)` is `x' = xcosθ-ysinθ+X` and `y' = ycosθ+xsinθ+Y`.
+However we are trying to find the amount of rotation and amount of translation,which are described by `θ`, `X`, and `Y` respectively.
 With three unknowns for both equations, those variables can be found using matrices if three points and their translations are known.
 However, often times we will be tracking more than three points and how should three points be selected out of many?
 Also often enough there will not be three points to track.   
 [Physics Forum on this method](https://www.physicsforums.com/threads/trying-to-derive-a-transformation-matrix-from-a-set-of-known-points.360963/)  
-Another way those variables can be solved for is by calculating the [homogenous transformation matrix](http://planning.cs.uiuc.edu/node99.html)(T), 
+Another way those variables can be solved for is by calculating the [homogenous transformation matrix](http://planning.cs.uiuc.edu/node99.html) (T), 
 which is a matrix that contains the equations listed previously.
 ```
  |cosθ   -sinθ     X|    |x1  x2 .. xN|    |x'1  x'2 .. x'N|
 T|sinθ    cosθ     Y| x X|y1  y2 .. yN|= X'|y'1  y'2 .. y'N|
  | 0        0      1|    | 1   1 ..  1|    |  1    1 ..   1|
 ```
-This can be multiplied by a set of points to get the translated points
+This can be multiplied by a set of points (`X`) to get the translated points (`X'`).
+However, as said before, we know the original and translated points, and need to find the transformation matrix.
+We can solve this equation for the transformation matrix quite easily.
+In normal math, the equation `T*X=X'` would be solved for `T` by dividing by `X` on both sides of the equation.
+However division does not exist in matrix math, instead multiplication of a matrix by its inverse is done.
+`X` multiplied by its inverse, would result an identity matrix (`I`), which essentially is equal to 1 is normal algebra.
+Therefore, by multiplying both sides of the equation by the inverse of `X`, we get `T*I=X*invX'`.
+Those familiar with matrices woud notice a couple of wierd things in that equation.
+The first one is that the set of points we have is not necessarily what is called a square matrix, 
+which is a matrix that has the same amount of rows and columns.
+Generally speaking, a matrix has to be square in order to find its identity, for various reasons, 
+the main being that an inverse is defined that any matrix multiplied by its inverse in any order (`A*Ainv` or `Ainv*A`) 
+results in an Identity matrix (also generally speaking, the order of multiplication matters, and `AB` is not `BA`, 
+except in this case of inverses, where it should be).
+However, something called a psuedo-inverse can be calculated, 
+which essentially finds the inverse of a matrix if multiplied in a specific order (either `A*Ainv` or `Ainv*A`).
+For this the *numpy* algorithm `pinv` is used.
+The second wierd thing is that in matrix math, the order of a matrix multiplied by an indentity matrix also matters.
+Generally, an identity matrix is defined that `I*A=A`, not `A*I=A` like we have in our equation.
+However, because our matrix T is square, `T*I` is still equal to `T`.
+
 ---
 
 ## Vision
