@@ -86,8 +86,9 @@ We can solve this equation for the transformation matrix quite easily.
 In normal math, the equation `T*X=X'` would be solved for `T` by dividing by `X` on both sides of the equation.
 However division does not exist in matrix math, instead multiplication of a matrix by its inverse is done.
 `X` multiplied by its inverse, would result an identity matrix (`I`), which essentially is equal to 1 is normal algebra.
-Therefore, by multiplying both sides of the equation by the inverse of `X`, we get `T*I=X*invX'`.
-Those familiar with matrices woud notice a couple of wierd things in that equation.
+Therefore, by multiplying both sides of the equation by the inverse of `X`, we get `T*I=X*Xinv'`.
+Therefore, the transformation matrix can be calculated by `T=X*Xinv`
+> Those familiar with matrices woud notice a couple of wierd things in that equation.
 The first one is that the set of points we have is not necessarily what is called a square matrix, 
 which is a matrix that has the same amount of rows and columns.
 Generally speaking, a matrix has to be square in order to find its identity, for various reasons, 
@@ -99,7 +100,9 @@ which essentially finds the inverse of a matrix if multiplied in a specific orde
 For this the *numpy* algorithm `pinv` is used.
 The second wierd thing is that in matrix math, the order of a matrix multiplied by an indentity matrix also matters.
 Generally, an identity matrix is defined that `I*A=A`, not `A*I=A` like we have in our equation.
-However, because our matrix T is square, `T*I` is still equal to `T`.
+However, because our matrix T is square, `T*I` is still equal to `T`.  
+
+With the  transformation matrix, values of `θ`, `X`, and `Y` can be easily calculated.
 
 ---
 
