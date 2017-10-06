@@ -104,6 +104,20 @@ However, because our matrix T is square, `T*I` is still equal to `T`.
 
 With the  transformation matrix, values of `θ`, `X`, and `Y` can be easily calculated.
 
+This method, still needs multiple points to calculate reliably an accurate transformation matrix. 
+For this a better method for chosing points to track is needed. 
+Ideally, there are at least 3 distinct points to track, at minimum 2. 
+If there are less, it is not even worth to track as any calculations done are most likely not accurate. 
+Frame to frame, there are two types of points that should be tracked. 
+The first are the points that were previously tracked, as we know that those points were at one time good features to track. 
+However, in motion these points eventually move out of frame. 
+The second type are new points that need to be picked up to compensate for the previous points leaving the image.
+Implementing an efficient, elegant method for retaining previous points yet aquiring new points is essential. 
+Additionally, there are fallback ways to chose points if not enough are chosen by previously said method. 
+One way is to just lower the threshold for what a good point is. 
+Another way is to pick points randomly or gridlike in the image, and hope that the returned tracked points are accurate, 
+or a different tracking parameter set is used that removes points with low "scores."
+
 ---
 
 ## Vision
