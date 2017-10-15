@@ -124,3 +124,4 @@ or a different tracking parameter set is used that removes points with low "scor
 http://www.intorobotics.com/how-to-detect-and-track-object-with-opencv/
 
 ---
+https://stackoverflow.com/questions/4855823/get-mouse-deltas-using-python-in-linux

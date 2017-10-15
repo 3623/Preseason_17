@@ -18,12 +18,12 @@ if __name__ == '__main__':
     mask = np.zeros_like(resize)
 
     height, width = resize.shape[:2]
-    minDistanceP = (width + height) / 2 / 30
+    minDistanceP = (width + height) / 2 / 40
     RESET = 1
     MAXIMUM_TRANSLATION = ((height*height) + (width*width))/1000
     # params for ShiTomasi corner detection
-    FEATURE_PARAMS_1_1_1 = dict(maxCorners=30,
-                          qualityLevel=0.3,
+    FEATURE_PARAMS_1_1_1 = dict(maxCorners=15,
+                          qualityLevel=0.2,
                           minDistance =minDistanceP,
                           blockSize=7)
     # Parameters for lucas kanade optical flow
@@ -31,11 +31,12 @@ if __name__ == '__main__':
                      maxLevel=2,
                      criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
     ### TODO Threshold if no points are found initially
+    MINIMUM_POINTS = 3
 
     def transCoord(a):
         return([a[0]-(0*width/2), (0*height/2)-a[1], 1])
 
-    def selectPoints()
+    # def selectPoints()
     old_gray = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY)
     p0 = cv2.goodFeaturesToTrack(old_gray, mask=None, **FEATURE_PARAMS_1_1_1)
 
@@ -69,12 +70,12 @@ if __name__ == '__main__':
         print p1
         if len(p1) < MINIMUM_POINTS:
             print "No "
-            try:
-                p0 = cv2.goodFeaturesToTrack(old_gray, mask=None, **FEATURE_PARAMS_1_1_1)
-                p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **LK_PARAMS)
-                good_new = p1[st == 1]
-            except:
-                print "2nd attempt failed"
+            # try:
+            #     p0 = cv2.goodFeaturesToTrack(old_gray, mask=None, **FEATURE_PARAMS_1_1_1)
+            #     p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **LK_PARAMS)
+            #     good_new = p1[st == 1]
+            # except:
+            #     print "2nd attempt failed"
         good_old = p0[st == 1]
 
         good_new = p1[st == 1]
@@ -149,7 +150,7 @@ if __name__ == '__main__':
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
-    print "Final Count-%.f,  Max Length-%.2f,  Point Reset-%.f" %(count, MAXIMUM_TRANSLATION, RESET)
+    print "Frame Count- %.f,  Max Length- %.2f,  Point Reset- %.f" %(count, MAXIMUM_TRANSLATION, RESET)
     print "Displacement X: %.2f,  Displacement Y: %.2f" % (round(totalX, 2), round(totalY, 2))
     cv2.imshow("Optical Flow", img)
     cv2.waitKey(0)
