@@ -22,7 +22,7 @@ if __name__ == '__main__':
     RESET = 1
     MAXIMUM_TRANSLATION = ((height*height) + (width*width))/1000
     # params for ShiTomasi corner detection
-    FEATURE_PARAMS_1_1_1 = dict(maxCorners=15,
+    FEATURE_PARAMS_1_1_1 = dict(maxCorners=5,
                           qualityLevel=0.2,
                           minDistance =minDistanceP,
                           blockSize=7)
@@ -65,18 +65,7 @@ if __name__ == '__main__':
         ## calculate optical flow
         p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **LK_PARAMS)
         ## Replace "good_new" with new points
-        print p1.shape
-        print len(p1)
-        print p1
-        if len(p1) < MINIMUM_POINTS:
-            print "No "
-            # try:
-            #     p0 = cv2.goodFeaturesToTrack(old_gray, mask=None, **FEATURE_PARAMS_1_1_1)
-            #     p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **LK_PARAMS)
-            #     good_new = p1[st == 1]
-            # except:
-            #     print "2nd attempt failed"
-        good_old = p0[st == 1]
+
 
         good_new = p1[st == 1]
         good_old = p0[st == 1]
@@ -101,17 +90,22 @@ if __name__ == '__main__':
         # print check.round(3)
 
         opfl_corner_error = False
-        if np.abs(t[2][2]-1) > 0.05:
-            print "Optical Flow Error-Corner value of matrix is: %.5f. Count: %.f" \
-                  %(t[2][2].round(5), count)
-            # print t.round(4)
-            # print good_old.shape, good_new.shape
+        if len(p1) < MINIMUM_POINTS:
+            print "ERR|OPFL/POINTS- " \
+                  "Frame: %.f.  Points: %.f" \
+                  %(count, len(p1))
+            opfl_points_error = True
+
+        if np.abs(t[0][2]) > 0.05 or np.abs(t[1][2]) > 0.05 or np.abs(t[2][2]-1) > 0.05:
+            print "ERR|OPFL/BR- " \
+                  "Bottom row: %.5f, %.5f, %.5f. Frame: %.f.  Points: %.f" \
+                  %(t[2][0].round(5), t[2][1].round(5), t[2][2].round(5), count, len(p1))
             opfl_corner_error = True
 
-        opfl_cos_error = False
         if np.abs(t[1][1] - t[0][0]) > 0.075:
-            print "Optical Flow Error-Cosine values of matrix are: %.5f, %.5f. Count: %.f" \
-                  %(t[0][0].round(5), t[1][1].round(5), count)
+            print "ERR|OPFL/COS- " \
+                  "Cosine values: %.5f, %.5f.  Frame: %.f.  Points: %.f" \
+                  %(t[0][0].round(5), t[1][1].round(5), count, len(p1))
             opfl_cos_error = True
 
         opfl_matrix_error = opfl_corner_error or opfl_cos_error
@@ -150,6 +144,7 @@ if __name__ == '__main__':
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+    print "======================================================="
     print "Frame Count- %.f,  Max Length- %.2f,  Point Reset- %.f" %(count, MAXIMUM_TRANSLATION, RESET)
     print "Displacement X: %.2f,  Displacement Y: %.2f" % (round(totalX, 2), round(totalY, 2))
     cv2.imshow("Optical Flow", img)
