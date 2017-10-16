@@ -8,7 +8,6 @@ import math
 if __name__ == '__main__':
 
     cap = cv2.VideoCapture('drop_tile.mp4')
-
     ## Create some random colors
     color = np.random.randint(0, 120, (100, 3))
     ## Take first frame and find corners in it
@@ -17,21 +16,21 @@ if __name__ == '__main__':
     ## Create a mask image for drawing purposes
     mask = np.zeros_like(resize)
 
+    RESET = 1
+    MINIMUM_POINTS = 3
+
     height, width = resize.shape[:2]
     minDistanceP = (width + height) / 2 / 40
-    RESET = 1
-    MAXIMUM_TRANSLATION = ((height*height) + (width*width))/1000
-    # params for ShiTomasi corner detection
+    ## params for ShiTomasi corner detection
     FEATURE_PARAMS_1_1_1 = dict(maxCorners=5,
                           qualityLevel=0.2,
                           minDistance =minDistanceP,
                           blockSize=7)
-    # Parameters for lucas kanade optical flow
+    ## Parameters for lucas kanade optical flow
     LK_PARAMS = dict(winSize=(15, 15),
                      maxLevel=2,
                      criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
-    ### TODO Threshold if no points are found initially
-    MINIMUM_POINTS = 3
+    ### TODO mineigenvals
 
     def transCoord(a):
         return([a[0]-(0*width/2), (0*height/2)-a[1], 1])
@@ -39,9 +38,6 @@ if __name__ == '__main__':
     # def selectPoints()
     old_gray = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY)
     p0 = cv2.goodFeaturesToTrack(old_gray, mask=None, **FEATURE_PARAMS_1_1_1)
-
-    # Function applied to points to make a corrected 3 column matrix
-
 
     count = 0
     totalR = 0
