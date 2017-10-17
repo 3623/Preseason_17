@@ -141,7 +141,7 @@ if __name__ == '__main__':
             break
 
     print "======================================================="
-    print "Frame Count- %.f,  Max Length- %.2f,  Point Reset- %.f" %(count, MAXIMUM_TRANSLATION, RESET)
+    print "Frame Count- %.f,  Point Reset- %.f" %(count, RESET)
     print "Displacement X: %.2f,  Displacement Y: %.2f" % (round(totalX, 2), round(totalY, 2))
     cv2.imshow("Optical Flow", img)
     cv2.waitKey(0)
