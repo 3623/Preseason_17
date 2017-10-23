@@ -18,6 +18,7 @@ if __name__ == '__main__':
 
     RESET = 1
     MINIMUM_POINTS = 3
+    MIN_EIGENVAL = 0.05
 
     height, width = resize.shape[:2]
     minDistanceP = (width + height) / 2 / 40
@@ -29,7 +30,8 @@ if __name__ == '__main__':
     ## Parameters for lucas kanade optical flow
     LK_PARAMS = dict(winSize=(15, 15),
                      maxLevel=2,
-                     criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+                     criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03),
+                     minEigThreshold=MIN_EIGENVAL)
     ### TODO mineigenvals
 
     def transCoord(a):
@@ -85,26 +87,35 @@ if __name__ == '__main__':
         # check = x * t
         # print check.round(3)
 
+        opfl_eigenval_error = False
+        opfl_points_error = False
         opfl_corner_error = False
-        if len(p1) < MINIMUM_POINTS:
-            print "ERR|OPFL/POINTS- " \
-                  "Frame: %.f.  Points: %.f" \
-                  %(count, len(p1))
+        opfl_cos_error = False
+        if len(good_new) < len(p1):
+            print "ERR %.f|OPFL/EIGEN- " \
+                  "Points: %.f,  Tracked: %.f,  Threshold: %g" \
+                  %(count, len(p1), len(good_new), MIN_EIGEN_VAL)
+            opfl_eigenval_error = True
+
+        if len(good_new) < MINIMUM_POINTS:
+            print "ERR %.f|OPFL/POINTS- " \
+                  "Points: %.f" \
+                  %(count, len(good_new))
             opfl_points_error = True
 
         if np.abs(t[0][2]) > 0.05 or np.abs(t[1][2]) > 0.05 or np.abs(t[2][2]-1) > 0.05:
-            print "ERR|OPFL/BR- " \
-                  "Bottom row: %.5f, %.5f, %.5f. Frame: %.f.  Points: %.f" \
-                  %(t[2][0].round(5), t[2][1].round(5), t[2][2].round(5), count, len(p1))
+            print "ERR %.f|OPFL/BR- " \
+                  "Bottom row: %.5f, %.5f, %.5f.  Points: %.f" \
+                  %(count, t[0][2].round(5), t[1][2].round(5), t[2][2].round(5), len(good_new))
             opfl_corner_error = True
 
         if np.abs(t[1][1] - t[0][0]) > 0.075:
-            print "ERR|OPFL/COS- " \
-                  "Cosine values: %.5f, %.5f.  Frame: %.f.  Points: %.f" \
-                  %(t[0][0].round(5), t[1][1].round(5), count, len(p1))
+            print "ERR %.f|OPFL/COS- " \
+                  "Cosine values: %.5f, %.5f.  Points: %.f" \
+                  %(count, t[0][0].round(5), t[1][1].round(5), len(good_new))
             opfl_cos_error = True
 
-        opfl_matrix_error = opfl_corner_error or opfl_cos_error
+        opfl_matrix_error = opfl_corner_error or opfl_cos_error or opfl_points_error
 
         ## draw the tracks
         terms = 0
@@ -118,8 +129,8 @@ if __name__ == '__main__':
             for i, (new, old) in enumerate(zip(good_new, good_old)):
                 a, b = new.ravel()
                 c, d = old.ravel()
-                mask = cv2.line(mask, (a, b), (c, d), (75,75,75), 2)
-                resize = cv2.circle(resize, (a, b), 5, color[i].tolist(), -1)
+                mask = cv2.line(mask, (a, b), (c, d), (0,255,0), 1)
+                resize = cv2.circle(resize, (a, b), 5, (255,0,255), -1)
 
         no_terms_error = False
 
@@ -141,7 +152,7 @@ if __name__ == '__main__':
             break
 
     print "======================================================="
-    print "Frame Count- %.f,  Point Reset- %.f" %(count, RESET)
+    print "Frame Count- %.f,  Point Reset- %.f,  Eigen Val Threshold- %g" %(count, RESET, MIN_EIGENVAL)
     print "Displacement X: %.2f,  Displacement Y: %.2f" % (round(totalX, 2), round(totalY, 2))
     cv2.imshow("Optical Flow", img)
     cv2.waitKey(0)
