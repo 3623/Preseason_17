@@ -94,7 +94,7 @@ if __name__ == '__main__':
         if len(good_new) < len(p1):
             print "ERR %.f|OPFL/EIGEN- " \
                   "Points: %.f,  Tracked: %.f,  Threshold: %g" \
-                  %(count, len(p1), len(good_new), MIN_EIGEN_VAL)
+                  %(count, len(p1), len(good_new), MIN_EIGENVAL)
             opfl_eigenval_error = True
 
         if len(good_new) < MINIMUM_POINTS:
