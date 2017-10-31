@@ -27,3 +27,9 @@ There are multiple things that can be implemented in this:
 We do not have a magnetometer however. 
 We should look into investing in a proper IMU. 
 [Heres a relatively cheap one.](https://www.vexrobotics.com/vexpro/motors-electronics/pigeon-imu.html)
+
+https://github.com/RobotCasserole1736/RobotCasserole2017
+https://github.com/ligerbots/Steamworks2017Robot
+https://github.com/246overclocked/hungryhippo
+https://github.com/Team303/Java-Robot-Project-2017
+https://github.com/Doodleman360/WaterGameConfirmed
