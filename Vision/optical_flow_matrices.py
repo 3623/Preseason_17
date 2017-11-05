@@ -121,7 +121,6 @@ if __name__ == '__main__':
                   "Sine values: %.5f, %.5f.  Points: %.f" \
                   %(count, t[0][1].round(5), t[1][0].round(5), len(good_new))
             opfl_sin_error = True
-            print t.round(4)
 
         opfl_matrix_error = opfl_corner_error or opfl_cos_error or opfl_points_error
 
@@ -141,13 +140,20 @@ if __name__ == '__main__':
                 resize = cv2.circle(resize, (a, b), 5, (255,0,255), -1)
             # print t.round(4)
 
-        no_terms_error = False
+        x = t[2][0]
+        y = t[2][1]
+        cos = t[0][0] + t[1][1]
+        sin = t[0][1] - t[1][0]
+        r = np.arctan2(sin, cos)
+        degrees = np.degrees(r)
+        # print x.round(4), y.round(4), cos.round(4), sin.round(4), r.round(4), degrees.round(4)
+        totalX += x
+        totalY += y
+        totalR += degrees
 
         old_gray = frame_gray.copy()
-        # if opfl_matrix_error == True:
-        #     None
-        # el
-        if count%RESET == 0: #or error == True:
+
+        if count%RESET == 0:
             p0 = cv2.goodFeaturesToTrack(frame_gray, mask=None, **FEATURE_PARAMS_1_1_1)
         else:
             p0 = p1
@@ -162,7 +168,8 @@ if __name__ == '__main__':
 
     print "======================================================="
     print "Frame Count- %.f,  Point Reset- %.f,  Eigen Val Threshold- %g" %(count, RESET, MIN_EIGENVAL)
-    print "Displacement X: %.2f,  Displacement Y: %.2f" % (round(totalX, 2), round(totalY, 2))
+    print "Displacement X: %.2f,  Displacement Y: %.2f,  Displacement R: %.2f" % \
+          (round(totalX, 2), round(totalY, 2), round(totalR, 2))
     cv2.imshow("Optical Flow", img)
     cv2.waitKey(0)
     cap.release()
