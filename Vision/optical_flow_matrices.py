@@ -88,32 +88,40 @@ if __name__ == '__main__':
         # print check.round(3)
 
         opfl_eigenval_error = False
-        opfl_points_error = False
-        opfl_corner_error = False
-        opfl_cos_error = False
         if len(good_new) < len(p1):
             print "ERR %.f|OPFL/EIGEN- " \
                   "Points: %.f,  Tracked: %.f,  Threshold: %g" \
                   %(count, len(p1), len(good_new), MIN_EIGENVAL)
             opfl_eigenval_error = True
 
+        opfl_points_error = False
         if len(good_new) < MINIMUM_POINTS:
             print "ERR %.f|OPFL/POINTS- " \
                   "Points: %.f" \
                   %(count, len(good_new))
             opfl_points_error = True
 
+        opfl_corner_error = False
         if np.abs(t[0][2]) > 0.05 or np.abs(t[1][2]) > 0.05 or np.abs(t[2][2]-1) > 0.05:
             print "ERR %.f|OPFL/BR- " \
                   "Bottom row: %.5f, %.5f, %.5f.  Points: %.f" \
                   %(count, t[0][2].round(5), t[1][2].round(5), t[2][2].round(5), len(good_new))
             opfl_corner_error = True
 
+        opfl_cos_error = False
         if np.abs(t[1][1] - t[0][0]) > 0.075:
             print "ERR %.f|OPFL/COS- " \
                   "Cosine values: %.5f, %.5f.  Points: %.f" \
                   %(count, t[0][0].round(5), t[1][1].round(5), len(good_new))
             opfl_cos_error = True
+
+        opfl_sin_error = False
+        if np.abs(t[0][1] - t[1][0]) > 0.075:
+            print "ERR %.f|OPFL/SIN- " \
+                  "Sine values: %.5f, %.5f.  Points: %.f" \
+                  %(count, t[0][1].round(5), t[1][0].round(5), len(good_new))
+            opfl_sin_error = True
+            print t.round(4)
 
         opfl_matrix_error = opfl_corner_error or opfl_cos_error or opfl_points_error
 
@@ -123,7 +131,7 @@ if __name__ == '__main__':
             for i, (new, old) in enumerate(zip(good_new, good_old)):
                 a, b = new.ravel()
                 c, d = old.ravel()
-                mask = cv2.line(mask, (a, b), (c, d), color[i].tolist(), 2)
+                mask = cv2.line(mask, (a, b), (c, d), (0, 0 , 255), 2)
                 resize = cv2.circle(resize, (a, b), 5, color[i].tolist(), -1)
         else:
             for i, (new, old) in enumerate(zip(good_new, good_old)):
@@ -131,6 +139,7 @@ if __name__ == '__main__':
                 c, d = old.ravel()
                 mask = cv2.line(mask, (a, b), (c, d), (0,255,0), 1)
                 resize = cv2.circle(resize, (a, b), 5, (255,0,255), -1)
+            # print t.round(4)
 
         no_terms_error = False
 
