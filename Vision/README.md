@@ -1,4 +1,4 @@
-## **Visual Intertial Odometry**
+## **Visual Inertial Odometry**
 To figure out where we are in the world, we subconciously use our eyes to determine not only position relative to other objects, 
 but also our speed relative to those objects.
 It works quite well most of the time, and video game designers know this so that they can design their games to make it seem like we are moving.
