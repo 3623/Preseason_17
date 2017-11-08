@@ -7,4 +7,6 @@ http://smallbusiness.chron.com/transferring-files-ssh-ubuntu-34953.html
 https://help.ubuntu.com/community/SSH/TransferFiles  
 https://www.digitalocean.com/community/tutorials/how-to-use-sshfs-to-mount-remote-file-systems-over-ssh  
 https://askubuntu.com/questions/644911/unable-to-upgrade-pip  
-https://forum.odroid.com/viewtopic.php?f=52&t=16308
+https://forum.odroid.com/viewtopic.php?f=52&t=16308  
+https://forum.odroid.com/viewtopic.php?f=95&t=7446  
+https://github.com/mdrjr/odroid-utility  
