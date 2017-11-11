@@ -13,3 +13,6 @@ https://forum.odroid.com/viewtopic.php?f=95&t=7446
 https://www.digitalocean.com/community/tutorials/how-to-add-and-delete-users-on-ubuntu-16-04  
 https://askubuntu.com/questions/378046/how-to-run-ubuntu-xubuntu-in-a-complete-non-gui-mode  
 https://askubuntu.com/questions/16371/how-do-i-disable-x-at-boot-time-so-that-the-system-boots-in-text-mode  
+
+https://wiki.python.org/moin/UdpCommunication  
+https://wiki.python.org/moin/TcpCommunication  
