@@ -1,0 +1,5 @@
+Static Allocations:
+
+10.17.36.8 - 1C:BA:8C:90:1C:73 (BBB)
+10.17.36.10 - 00:40:8C:BE:DD:4A (Axis M1011 Camera for Vision Processing)
+10.17.36.10 - 00:40:8C:E0:16:8E (Axis M1013 Camera for Vision Processing)

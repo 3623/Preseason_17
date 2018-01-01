@@ -1,24 +1,24 @@
 import sys
 import cv2
 import numpy as np
-import math
+import socket
 
 
 
 if __name__ == '__main__':
-
+    SCALE_FACTOR = 0.1
     cap = cv2.VideoCapture('drop_tile.mp4')
     ## Create some random colors
     color = np.random.randint(0, 120, (100, 3))
     ## Take first frame and find corners in it
     ret, old_frame = cap.read()
-    resize = cv2.resize(old_frame, (0, 0), fx=0.5, fy=0.5)
+    resize = cv2.resize(old_frame, (0, 0), fx=SCALE_FACTOR, fy=SCALE_FACTOR)
     ## Create a mask image for drawing purposes
     mask = np.zeros_like(resize)
 
     RESET = 1
     MINIMUM_POINTS = 3
-    MAXIMUM_POINTS = 5
+    MAXIMUM_POINTS = 4
     MIN_EIGENVAL = 0.05
 
     height, width = resize.shape[:2]
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         ret, frame = cap.read()
         if frame is None:
             break
-        resize = cv2.resize(frame, (0, 0), fx=0.5, fy=0.5)
+        resize = cv2.resize(frame, (0, 0), fx=SCALE_FACTOR, fy=SCALE_FACTOR)
         frame_gray = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY)
 
         ## calculate optical flow
@@ -87,6 +87,7 @@ if __name__ == '__main__':
             # print check.round(3)
         except:
             print "ERR %.f|MATR- Old Points- %.f,  New Points- %.f" %(count, len(good_new), len(good_old))
+
 
         opfl_eigenval_error = False
         if len(good_new) < len(p1):
@@ -125,21 +126,21 @@ if __name__ == '__main__':
 
         opfl_matrix_error = opfl_corner_error or opfl_cos_error or opfl_points_error
 
-        ## draw the tracks
-        terms = 0
-        if opfl_matrix_error:
-            for i, (new, old) in enumerate(zip(good_new, good_old)):
-                a, b = new.ravel()
-                c, d = old.ravel()
-                mask = cv2.line(mask, (a, b), (c, d), (0, 0 , 255), 2)
-                resize = cv2.circle(resize, (a, b), 5, color[i].tolist(), -1)
-        else:
-            for i, (new, old) in enumerate(zip(good_new, good_old)):
-                a, b = new.ravel()
-                c, d = old.ravel()
-                mask = cv2.line(mask, (a, b), (c, d), (0,255,0), 1)
-                resize = cv2.circle(resize, (a, b), 5, (255,0,255), -1)
-            # print t.round(4)
+#        ## draw the tracks
+#        terms = 0
+#        if opfl_matrix_error:
+#            for i, (new, old) in enumerate(zip(good_new, good_old)):
+#                a, b = new.ravel()
+#                c, d = old.ravel()
+#                mask = cv2.line(mask, (a, b), (c, d), (0, 0 , 255), 2)
+#                resize = cv2.circle(resize, (a, b), 5, color[i].tolist(), -1)
+#        else:
+#            for i, (new, old) in enumerate(zip(good_new, good_old)):
+#                a, b = new.ravel()
+#                c, d = old.ravel()
+#                mask = cv2.line(mask, (a, b), (c, d), (0,255,0), 1)
+#                resize = cv2.circle(resize, (a, b), 5, (255,0,255), -1)
+#            # print t.round(4)
 
         x = t[2][0]
         y = t[2][1]
@@ -159,8 +160,8 @@ if __name__ == '__main__':
         else:
             p0 = p1
 
-        img = cv2.add(resize, mask)
-        cv2.imshow("Optical Flow", img)
+#        img = cv2.add(resize, mask)
+#        cv2.imshow("Optical Flow", img)
         ## Now update the previous frame and previous points
         # if (opfl_corner_error or opfl_cos_error):
         #     cv2.waitKey()
@@ -172,7 +173,7 @@ if __name__ == '__main__':
     print "Displacement X: %.2f,  Displacement Y: %.2f,  Displacement R: %.2f" % \
           (round(totalX, 2), round(totalY, 2), round(totalR, 2))
     print "Image Height- %.f, Image Width- %.f, Pixels- %.f" %(height, width, height*width)
-    cv2.imshow("Optical Flow", img)
-    cv2.waitKey(0)
-    cap.release()
-    cv2.destroyAllWindows()
+#    cv2.imshow("Optical Flow", img)
+#    cv2.waitKey(0)
+#    cap.release()
+#    cv2.destroyAllWindows()

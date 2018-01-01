@@ -1,0 +1,35 @@
+title Calibrations
+alt Connect
+    note left of Robot: Cals Init'ed in Robot code
+    Client->Robot: HTTP GET Request
+    Robot->Client: .html/.css/.js source
+    note right of Client: Javascript runs
+    Client->Robot: Websocket Connect
+    Robot->Client: JSON Set of all Calibrations
+    note right of Client: Webpage displayed
+
+else Value Update
+
+note right of Client: User updates Cal Value
+Client->Robot: \"set:<name>:<val>\"
+note left of Robot: <name> updated to <val>
+Robot->Client: JSON Set of all Calibrations
+note right of Client: Displayed vals update
+
+else Value Reset
+
+note right of Client: User Resets Cal Value
+Client->Robot: \"reset:<name>\"
+note left of Robot: <name> set to default val
+Robot->Client: JSON Set of all Calibrations
+note right of Client: Displayed vals update
+
+else Save
+
+note right of Client: User selects Save button
+Client->Robot: \"save\"
+note left of Robot: Attempt to re-write Cal .csv
+Robot->Client: Success | Fail message
+note right of Client: Message displayed in popup
+
+end

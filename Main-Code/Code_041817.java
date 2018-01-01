@@ -68,7 +68,7 @@ public class Robot extends IterativeRobot {
     BuiltInAccelerometer accel;
     double XValField = 0.0;
     public int accelCounter = 0;
-    public double[] accelValues = new double[] {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    public double[] accelValues = new double[] {0,0,0,0,0,0,0,0,0,0,0,0};
     
 	public static final int FRONT_LEFT_MOTOR = 0;
     public static final int FRONT_RIGHT_MOTOR = 1;
@@ -252,7 +252,8 @@ public class Robot extends IterativeRobot {
 	driveBase.mecanumDrive_Cartesian(0.0, -0.65*autoTime, pointtoRotate(0.0, 1.0), spin.getAngle());
 	}
 	else if (autoTime < 5.0){
-	driveBase.mecanumDrive_Cartesian(acceldriveStraight(gyroCorrected(), 1.0), -0.65, pointtoRotate(0.0, 1.0), spin.getAngle());
+	driveBase.mecanumDrive_Cartesian(acceldriveStraight(gyroCorrected(), 1.0),
+			-0.65, pointtoRotate(0.0, 1.0), spin.getAngle());
 	}
 	else {
 	driveBase.mecanumDrive_Cartesian(0.0, 0.0, 0.4, spin.getAngle());
@@ -281,7 +282,8 @@ public class Robot extends IterativeRobot {
 	}
 	else{
 	if (backOff == false && gearLifted == false){
-	if (contours == 1 && visionStart == false && endAuto == false){//Continues driving at a slower speed until two targets are found
+	if (contours == 1 && visionStart == false && endAuto == false){
+		//Continues driving at a slower speed until two targets are found
 	if(XDif < 0){
 	driveBase.mecanumDrive_Cartesian(-0.32, 0.0, pointtoRotate(0.0, 1.0), spin.getAngle());
 	}
@@ -394,7 +396,8 @@ public class Robot extends IterativeRobot {
 	stage = 12;
 	}
 	}
-	else if (contours != 0 && (gyroCorrected() < 57.0 || gyroCorrected() > 63.0 || autoTime < 2.5)){// Prevents code from thinking target is found at unreallistic times
+	else if (contours != 0 && (gyroCorrected() < 57.0 || gyroCorrected() > 63.0 || autoTime < 2.5)){
+		// Prevents code from thinking target is found at unreallistic times
 	driveBase.mecanumDrive_Cartesian(0.0, -0.38, pointtoRotate(60.0, 0.25), spin.getAngle());
 	stage = 13;
 	}
@@ -571,7 +574,8 @@ public class Robot extends IterativeRobot {
 	stage = 12;
 	}
 	}
-	else if (contours != 0 && (gyroCorrected() < 297.0 || gyroCorrected() > 303.0 || autoTime < 2.5)){// Prevents code from thinking target is found at unreallistic times
+	else if (contours != 0 && (gyroCorrected() < 297.0 || gyroCorrected() > 303.0 || autoTime < 2.5)){
+		// Prevents code from thinking target is found at unreallistic times
 	driveBase.mecanumDrive_Cartesian(0.0, -0.38, pointtoRotate(300.0, 0.25), spin.getAngle());
 	stage = 13;
 	}
@@ -864,7 +868,8 @@ public class Robot extends IterativeRobot {
 	angle = 0.0;
 	driveModeSelected = "Robot Oriented";
 	}
-	else if(driveDirection.getRawButton(4) || driveDirection.getRawButton(5) || operator.getRawButton(6) || operator.getRawButton(5) || (operator.getRawAxis(2) > 0.1)){
+	else if(driveDirection.getRawButton(4) || driveDirection.getRawButton(5) || operator.getRawButton(6) 
+			|| operator.getRawButton(5) || (operator.getRawAxis(2) > 0.1)){
 	angle = 0.0;
 	driveModeSelected = "Axis Lock";
 	}
@@ -916,7 +921,8 @@ public class Robot extends IterativeRobot {
 	rotationSmart = 0.0;
 	}
 	else{//Calls point to rotate using joystick angle for desired angle and joystick magnitude for magnitude
-	rotationSmart = pointtoRotate(rotationjoystickCorrected(),((driveRotation.getMagnitude()/5)+0.8) * (((2 - Math.abs(driveY) - Math.abs(driveX)) / 2)/2 + 0.75));
+	rotationSmart = pointtoRotate(rotationjoystickCorrected(),((driveRotation.getMagnitude()/5)+0.8) * 
+			(((2 - Math.abs(driveY) - Math.abs(driveX)) / 2)/2 + 0.75));
 	}
 	}
 	//Rotates based off normal rotation joystick x-magnitude
@@ -958,7 +964,8 @@ public class Robot extends IterativeRobot {
 	else if( (gyroCorrected() - angle) < -180){
 	rotationDif = (gyroCorrected() - angle + 360) ;
 	}
-	//If the magnitude of the difference is less than 180 than it is equal to the net difference. so nothing extra is done
+	//If the magnitude of the difference is less than 180 than it is equal to the net difference. 
+	// so nothing extra is done
 	else{
 	rotationDif = (gyroCorrected() - angle) ;
 	}

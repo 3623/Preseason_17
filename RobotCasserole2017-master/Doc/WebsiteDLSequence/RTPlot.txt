@@ -1,0 +1,30 @@
+title RealTime Data Plot
+alt Connect
+    note left of Robot: Plot Signals \nInit'ed in Robot code
+    Client->Robot: HTTP GET Request
+    Robot->Client: .html/.css/.js source
+    note right of Client: Javascript runs
+    Client->Robot: Websocket Connect
+    Client->Robot: Cmd: Get Signals
+    Robot->Client: JSON Set of all available signals
+    note right of Client: Available signals displayed
+
+else Value Update
+
+    loop Period: on request
+        note right of Client: User Selects desired signals
+        note right of Client: User Selects Run button
+        Client->Robot: Cmd: Start
+        Client->Robot: JSON List of selected signals
+        note right of Client: Plot Cleared
+        note left of Robot: TX Thread Started
+        loop Period: 250ms
+            Robot->Client: JSON Set of all sample time/value pairs
+            note right of Client: Plot Updated
+        end
+        note right of Client: User Selects Stop button
+        Client->Robot: Cmd: Stop
+        note left of Robot: TX Thread Ended
+    end
+
+end

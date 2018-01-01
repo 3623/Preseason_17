@@ -1,0 +1,21 @@
+title Driver View
+alt Connect
+    note left of Robot: DriverView Objects \nInit'ed in Robot code
+    Client->Robot: HTTP GET Request
+    Robot->Client: .html/.css/.js source
+    note right of Client: Javascript runs
+    Client->Webcameras: MJPEG Requests
+    Client->Robot: Websocket Connect
+    Robot->Client: JSON Set of all Driver View Objects
+    note right of Client: Webpage displayed
+
+else Value Update
+
+    loop Period: 100ms
+
+        Robot->Client: JSON Set of all values
+        Webcameras->Client: MJPEG Image
+        note right of Client: Displayed vals update
+    end
+
+end
