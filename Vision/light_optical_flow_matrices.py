@@ -77,9 +77,9 @@ if __name__ == '__main__':
             # print x
             x_inv = np.linalg.pinv(x)
             t = np.asarray(x_inv * x_prime)
-            # transpose = np.asarray(np.transpose(t))
-#            print "========================="
-#            print transpose.round(4)
+            transpose = np.asarray(np.transpose(t))
+            print "========================="
+            print transpose.round(4)
             # print x_inv.shape, x_prime.shape
             # print t.round(4)
             # print "========================="

@@ -5,7 +5,17 @@ import socket
 
 class VisualOdometry:
 
-    def __init__(self,channel=0,height=120,width=160,scale=0.1,reset=1,min=3,max=4,eigen=0.05,debug=False):
+    def __init__(self,
+                 channel=0,
+                 height=240,
+                 width=320,
+                 scale=0.1,
+                 reset=1,
+                 min=3,
+                 max=4,
+                 eigen=0.05,
+                 debug=False):
+
         self.CHANNEL = channel
 
         self.HEIGHT = height
@@ -19,11 +29,10 @@ class VisualOdometry:
 
         self.test = debug
 
-        if self.test:
-            ## Create some random colors
-            self.color = np.random.randint(0, 120, (100, 3))
+        if (self.test):
+            None
             ## Use preset video
-            self.CHANNEL = 'drop_tile.mp4'
+            # self.CHANNEL = 'drop_tile.mp4'
 
         ## Minimum distance between points
         self.minDistanceP = (self.WIDTH + self.HEIGHT) / 2 / 40
@@ -38,183 +47,245 @@ class VisualOdometry:
                          criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03),
                          minEigThreshold=self.MIN_EIGENVAL)
         ### TODO mineigenvals??
-        self.resetAll()
-        self.CHANNEL = 0
 
-    def transCoord(a):
-        return ([a[0] - (0 * self.width / 2), (0 * self.height / 2) - a[1], 1])
+        ### TODO Init should handle logging
+
+        self.setCamera
+
+        self.resetAll() ## or self.run()
+
+    def translateCoordinates(self, a):
+        return ([a[0] - (0 * self.WIDTH / 2), (0 * self.HEIGHT / 2) - a[1], 1])
+
+
+    def resetAll(self):
+        self.count = 0
+        # self.
+        # self.run()
+
+
+    def setCamera(self, cap):
+        cap.set()
+
 
     def reshape(self, image):
         return cv2.resize(image, (self.WIDTH, self.HEIGHT))
 
-    def resetAll(self):
-        self.count = 0
-        self.totalR = 0
-        self.totalX = 0
-        self.totalY = 0
+
+    def calculateMatrix(self, new_points, old_points, debug):
+        try:
+            translated_matrix = np.matrix(np.apply_along_axis(self.translateCoordinates, 1, new_points))
+            original_matrix = np.matrix(np.apply_along_axis(self.translateCoordinates, 1, old_points))
+            inverse_original_matrix = np.linalg.pinv(original_matrix)
+            transformation_matrix = np.asarray(inverse_original_matrix * translated_matrix)
+            transposed_transformation_matrix = np.asarray(np.transpose(transformation_matrix))
+            return True, transposed_transformation_matrix
+        except:
+            print "ERR %.f|MATR- Old Points- %.f,  New Points- %.f" % \
+                  (self.count, len(new_points), len(old_points))
+            ### TODO maybe replace count with timestamp??
+            return False, None## TODO
+
+
+    def calculateDisplacement(self, transformation_matrix):
+        x_displacement = transformation_matrix[0][2]
+        y_displacement = transformation_matrix[1][2]
+        cosine = (transformation_matrix[0][0] + transformation_matrix[1][1])/2
+        sine = (transformation_matrix[1][0] - transformation_matrix[0][1])/2
+        rotational_displacement_radians = np.arctan2(sine, cosine)
+        rotational_displacement_degrees = np.degrees(rotational_displacement_radians)
+        return x_displacement, y_displacement, rotational_displacement_degrees
+
+
+    def errorChecking(self, transformation_matrix, attempted_points, good_points):
+        ### Error checking ## TODO need error handling
+        opfl_eigenval_error = False
+        if len(good_points) < len(attempted_points):
+            print "ERR %.f|OPFL/EIGEN- " \
+                  "Points: %.f,  Tracked: %.f,  Threshold: %g" \
+                  % (self.count,
+                     len(attempted_points),
+                     len(good_points),
+                     self.MIN_EIGENVAL)
+            opfl_eigenval_error = True
+
+        opfl_points_error = False
+        if len(good_points) < self.MINIMUM_POINTS:
+            print "ERR %.f|OPFL/POINTS- " \
+                  "Points: %.f" \
+                  % (self.count, len(good_points))
+            opfl_points_error = True
+
+        opfl_corner_error = False
+        if np.abs(transformation_matrix[0][2]) > 0.05 \
+                or np.abs(transformation_matrix[1][2]) > 0.05 \
+                or np.abs(transformation_matrix[2][2] - 1) > 0.05:
+            print "ERR %.f|OPFL/BR- " \
+                  "Bottom row: %.5f, %.5f, %.5f.  Points: %.f" \
+                  % (self.count, transformation_matrix[0][2].round(5),
+                     transformation_matrix[1][2].round(5),
+                     transformation_matrix[2][2].round(5),
+                     len(good_points))
+            opfl_corner_error = True
+
+        opfl_cos_error = False
+        if np.abs(transformation_matrix[1][1] - transformation_matrix[0][0]) > 0.075:
+            print "ERR %.f|OPFL/COS- " \
+                  "Cosine values: %.5f, %.5f.  Points: %.f" \
+                  % (self.count,
+                     transformation_matrix[0][0].round(5),
+                     transformation_matrix[1][1].round(5),
+                     len(good_points))
+            opfl_cos_error = True
+
+        opfl_sin_error = False
+        if np.abs(transformation_matrix[0][1] - transformation_matrix[1][0]) > 0.075:
+            print "ERR %.f|OPFL/SIN- " \
+                  "Sine values: %.5f, %.5f.  Points: %.f" \
+                  % (self.count,
+                     transformation_matrix[0][1].round(5),
+                     transformation_matrix[1][0].round(5),
+                     len(good_points))
+            opfl_sin_error = True
+
+        opfl_matrix_error = opfl_corner_error or opfl_cos_error or opfl_points_error
+        return opfl_matrix_error, 0
+
+
+    def process(self, count, old_frame, new_frame, p0):
+        ## calculate optical flow
+        p1, st, err = cv2.calcOpticalFlowPyrLK(old_frame, new_frame, p0, None, **self.LK_PARAMS)
+
+        ## Replace "good_new_points" with new points
+        good_new_points = p1[st == 1]
+        good_old_points = p0[st == 1]
+
+        ### TODO Need a way to maintain points if tracking fails
+
+        matrix_success, t = self.calculateMatrix(good_new_points, good_old_points, self.test)
+        if (matrix_success):
+            abort, score = self.errorChecking(t, p1, good_new_points)
+
+            x, y, r = self.calculateDisplacement(t)
+
+            score = 0
+
+            if (self.test):
+                print t.round(4)
+                print x.round(4), y.round(4), r.round(4)
+
+                ## draw the tracks
+                if abort:
+                    for i, (new, old) in enumerate(zip(good_new_points, good_old_points)):
+                        a, b = new.ravel()
+                        c, d = old.ravel()
+                        self.mask = cv2.line(self.mask, (a, b), (c, d), (0, 0, 255), 2)
+                        self.resize = cv2.circle(self.resize, (a, b), 5, self.color[i].tolist(), -1)
+                else:
+                    for i, (new, old) in enumerate(zip(good_new_points, good_old_points)):
+                        a, b = new.ravel()
+                        c, d = old.ravel()
+                        self.mask = cv2.line(self.mask, (a, b), (c, d), (0, 255, 0), 1)
+                        self.resize = cv2.circle(self.resize, (a, b), 5, (255, 0, 255), -1)
+                self.img = cv2.add(self.resize, self.mask)
+
+            ## Now update the previous frame and previous points
+            return p1, score, x, y, r
+        else:
+            ### TODO figure out what to do if matrix fails yaknow
+            ## Now update the previous frame and previous points
+            return p1, 0, 0, 0, 0
+
 
     def run(self):
         cap = cv2.VideoCapture(self.CHANNEL)
         ret, frame = cap.read()
-        cap.release() ## Releases no next frame will have to be fresh
-        cv2.imshow("Fuck", frame)
+        # cap.release() ## Releases no next frame will have to be fresh ## Need to try stuff out
 
         old_frame = cv2.cvtColor(self.reshape(frame), cv2.COLOR_BGR2GRAY)
         ## Take first frame and find corners in it
         p0 = cv2.goodFeaturesToTrack(old_frame, mask=None, **self.FEATURE_PARAMS)
+
         if (self.test):
-            ## Create a mask image for drawing purposes
-             mask = np.zeros_like(old_frame)
+            self.resize = self.reshape(frame) ## Create a mask image for drawing purposes
+            self.mask = np.zeros_like(self.resize)
+            self.color = np.random.randint(0, 120, (100, 3)) ## Create some random colors
 
         while True:
             ## Counter- resets at a certain count
             self.count += 1
-            if self.count == 60:
+            if self.count == 0:
                 None
             else:
                 None
 
-            cap = cv2.VideoCapture(self.CHANNEL)
+            # cap = cv2.VideoCapture(self.CHANNEL)
             ret, frame = cap.read()
-            cap.release()  ## Releases no next frame will have to be fresh
+            # cap.release()  ## Releases no next frame will have to be fresh ## Need to try stuff out
             if frame is None:
                 break
             else:
                 new_frame =  cv2.cvtColor(self.reshape(frame), cv2.COLOR_BGR2GRAY)
-            print p0
-            ## calculate optical flow
-            p1, st, err = cv2.calcOpticalFlowPyrLK(old_frame, new_frame, p0, None, **self.LK_PARAMS)
-            ## Replace "good_new" with new points
-
-
-            good_new = p1[st == 1]
-            good_old = p0[st == 1]
-            ### TODO Need a way to maintain points if tracking fails
-
-            try:
-                x_prime = np.matrix(np.apply_along_axis(transCoord, 1, good_new))
-                x = np.matrix(np.apply_along_axis(transCoord, 1, good_old))
-                x_inv = np.linalg.pinv(x)
-                t = np.asarray(x_inv * x_prime)
-                if (self.test):  ## Testing outputs
-                    print x_prime
-                    print x
-                    transpose = np.asarray(np.transpose(t))
-                    print "========================="
-                    print transpose.round(4)
-                    print x_inv.shape, x_prime.shape
-                    print t.round(4)
-                    print "========================="
-                    check = x * t
-                    print check.round(3)
-            except:
-                print "ERR %.f|MATR- Old Points- %.f,  New Points- %.f" % (self.count, len(good_new), len(good_old))
-                continue
-
-            ### Error checking ## TODO need error handling
-            opfl_eigenval_error = False
-            if len(good_new) < len(p1):
-                print "ERR %.f|OPFL/EIGEN- " \
-                      "Points: %.f,  Tracked: %.f,  Threshold: %g" \
-                      % (self.count, len(p1), len(good_new), self.MIN_EIGENVAL)
-                opfl_eigenval_error = True
-
-            opfl_points_error = False
-            if len(good_new) < self.MINIMUM_POINTS:
-                print "ERR %.f|OPFL/POINTS- " \
-                      "Points: %.f" \
-                      % (self.count, len(good_new))
-                opfl_points_error = True
-
-            opfl_corner_error = False
-            if np.abs(t[0][2]) > 0.05 or np.abs(t[1][2]) > 0.05 or np.abs(t[2][2] - 1) > 0.05:
-                print "ERR %.f|OPFL/BR- " \
-                      "Bottom row: %.5f, %.5f, %.5f.  Points: %.f" \
-                      % (self.count, t[0][2].round(5), t[1][2].round(5), t[2][2].round(5), len(good_new))
-                opfl_corner_error = True
-
-            opfl_cos_error = False
-            if np.abs(t[1][1] - t[0][0]) > 0.075:
-                print "ERR %.f|OPFL/COS- " \
-                      "Cosine values: %.5f, %.5f.  Points: %.f" \
-                      % (self.count, t[0][0].round(5), t[1][1].round(5), len(good_new))
-                opfl_cos_error = True
-
-            opfl_sin_error = False
-            if np.abs(t[0][1] - t[1][0]) > 0.075:
-                print "ERR %.f|OPFL/SIN- " \
-                      "Sine values: %.5f, %.5f.  Points: %.f" \
-                      % (self.count, t[0][1].round(5), t[1][0].round(5), len(good_new))
-                opfl_sin_error = True
-
-            opfl_matrix_error = opfl_corner_error or opfl_cos_error or opfl_points_error
-
             if (self.test):
-                ## draw the tracks
-                if opfl_matrix_error:
-                    for i, (new, old) in enumerate(zip(good_new, good_old)):
-                        a, b = new.ravel()
-                        c, d = old.ravel()
-                        mask = cv2.line(mask, (a, b), (c, d), (0, 0, 255), 2)
-                        resize = cv2.circle(resize, (a, b), 5, color[i].tolist(), -1)
-                else:
-                    for i, (new, old) in enumerate(zip(good_new, good_old)):
-                        a, b = new.ravel()
-                        c, d = old.ravel()
-                        mask = cv2.line(mask, (a, b), (c, d), (0, 255, 0), 1)
-                        resize = cv2.circle(resize, (a, b), 5, (255, 0, 255), -1)
-                img = cv2.add(new_frame, mask)
+                self.resize = self.reshape(frame)
+            p1, score, x, y, r = self.process(self.count, old_frame, new_frame, p0)
 
-            x = t[2][0]
-            y = t[2][1]
-            cos = t[0][0] + t[1][1]
-            sin = t[0][1] - t[1][0]
-            r = np.arctan2(sin, cos)
-            degrees = np.degrees(r)
-            totalX += x
-            totalY += y
-            totalR += degrees
-            if (self.test):
-                print x.round(4), y.round(4), cos.round(4), sin.round(4), r.round(4), degrees.round(4)
-                print totalX.round(4), totalY.round(4), totalR.round(4)
-
-            if count % RESET == 0:
-                p0 = cv2.goodFeaturesToTrack(frame_gray, mask=None, **FEATURE_PARAMS_1_1_1)
+            if self.count % self.POINTS_RESET == 0:
+                p0 = cv2.goodFeaturesToTrack(new_frame, mask=None, **self.FEATURE_PARAMS)
             else:
                 p0 = p1
 
-            ## Now update the previous frame and previous points
-            old_frame = new_frame.copy()
+            if True:
+                old_frame = new_frame
+            else:
+                old_frame = None
 
             if (self.test):
-                cv2.imshow("Optical Flow", img)
+                cv2.imshow("Optical Flow", self.img)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
-
-
         ## End program output
         print "======================================================="
-        print "Frame Count- %.f,  Point Reset- %.f,  Eigen Val Threshold- %g" % (self.count, RESET, MIN_EIGENVAL)
-        print "Displacement X: %.2f,  Displacement Y: %.2f,  Displacement R: %.2f" % \
-              (round(totalX, 2), round(totalY, 2), round(totalR, 2))
-        print "Image Height- %.f, Image Width- %.f, Pixels- %.f" % (height, width, height * width)
+        print "Frame Count- %.f,  Point Reset- %.f,  Eigen Val Threshold- %g" % \
+              (self.count, self.POINTS_RESET, self.MIN_EIGENVAL)
+        print "Image Height- %.f, Image Width- %.f, Pixels- %.f" % \
+              (self.HEIGHT, self.WIDTH, self.HEIGHT * self.WIDTH)
 
         if (self.test):
             cv2.imshow("Optical Flow", img)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
 
-if __name__ == '__main__':
-    # while True:
-    #     cap = cv2.VideoCapture(0)
-    #     ret, frame = cap.read()
-    #     # cap.release()
-    #     cv2.imshow(" ", frame)
-    #     if cv2.waitKey(2000) != -1:
-    #         break
 
-    visual_odometry = VisualOdometry(debug=True)
+if __name__ == '__main__':
+    visual_odometry = VisualOdometry(channel=1,debug=False)
     print "Visual_Odometry Running"
     visual_odometry.run()
+
+    # cap = cv2.VideoCapture(1)
+    # count = 0
+    #
+    # while True:
+    #     count += 1
+    #     cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    #     # print cap.get(cv2.CAP_PROP_FPS)
+    #     ret, frame = cap.read()
+    #     # cap.release()
+    #     if not(count < 0):
+    #         cv2.imshow(" ", frame)
+    #         count += 1
+    #         if cv2.waitKey(1) & 0xFF == ord('q'):
+    #             break
+    #         if cv2.waitKey(0) & 0xFF == ord('w'):
+    #             continue
+    #     else:
+    #         continue
+    #
+    #
+    #
+    #     if cv2.waitKey(1) & 0xFF == ord('q'):
+    #         break
+    #
+    # cap.release()
 
