@@ -259,33 +259,33 @@ class VisualOdometry:
 
 
 if __name__ == '__main__':
-    visual_odometry = VisualOdometry(channel=1,debug=False)
-    print "Visual_Odometry Running"
-    visual_odometry.run()
+    # visual_odometry = VisualOdometry(channel=1,debug=False)
+    # print "Visual_Odometry Running"
+    # visual_odometry.run()
 
-    # cap = cv2.VideoCapture(1)
-    # count = 0
-    #
-    # while True:
-    #     count += 1
-    #     cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-    #     # print cap.get(cv2.CAP_PROP_FPS)
-    #     ret, frame = cap.read()
-    #     # cap.release()
-    #     if not(count < 0):
-    #         cv2.imshow(" ", frame)
-    #         count += 1
-    #         if cv2.waitKey(1) & 0xFF == ord('q'):
-    #             break
-    #         if cv2.waitKey(0) & 0xFF == ord('w'):
-    #             continue
-    #     else:
-    #         continue
-    #
-    #
-    #
-    #     if cv2.waitKey(1) & 0xFF == ord('q'):
-    #         break
-    #
-    # cap.release()
+    cap = cv2.VideoCapture(1)
+    count = 0
+
+    while True:
+        count += 1
+        # cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+        # print cap.get(cv2.CAP_PROP_FPS)
+        ret, frame = cap.read()
+        # cap.release()
+        # if not(count < 0):
+        #     cv2.imshow(" ", frame)
+        #     count += 1
+        #     if cv2.waitKey(1) & 0xFF == ord('q'):
+        #         break
+        #     if cv2.waitKey(0) & 0xFF == ord('w'):
+        #         continue
+        # else:
+        #     continue
+        cv2.imshow("fuck", frame)
+
+
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    print count
+    cap.release()
 
