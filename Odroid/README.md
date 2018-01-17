@@ -17,3 +17,7 @@ https://www.htpcbeginner.com/lightweight-desktop-environment-for-ubuntu-server/
 
 https://wiki.python.org/moin/UdpCommunication  
 https://wiki.python.org/moin/TcpCommunication  
+
+https://stackoverflow.com/questions/2846653/how-to-use-threading-in-python
+https://github.com/jrosebr1/imutils
+https://www.pyimagesearch.com/2015/12/21/increasing-webcam-fps-with-python-and-opencv/
